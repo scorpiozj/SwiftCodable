@@ -19,12 +19,15 @@ struct Landmark: Codable {
     private enum CodingKeys:String, CodingKey {
         case name
         case founding = "foundingYear"
-        case location
+        case latitude
+        case longitude
     }
 //    private enum AdditionalInfoKeys:String, CodingKeys {
 //        case location
 //    }
-    
+    init?(intValue: Int) {
+        return nil
+    }
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -32,9 +35,13 @@ struct Landmark: Codable {
         founding = try values.decode(Int.self, forKey: .founding)
         location = try Coordinate(from: decoder)
     }
-//    func encode(to encoder: Encoder) throws {
-//        let container = encoder.container(keyedBy: CodingKeys.self)
-//    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(founding, forKey: .founding)
+        try container.encode(location.latitude, forKey: .latitude)
+        try container.encode(location.longitude, forKey: .longitude)
+    }
 }
 
 
@@ -65,8 +72,22 @@ do {
         print("\(place.name) at \(place.founding)")
         print("\(place.location)")
     }
+    
+    let encoder = JSONEncoder()
+    
+    do {
+        let placesToEncode = placesInterest
+        let data = try encoder.encode(placesToEncode)
+        let string = String(data: data, encoding: .utf8) ?? "empty"
+        print("string=:\n \(string)")
+        
+    } catch{
+        print("encode error: \(error)")
+    }
 
 } catch {
     print("error:\(error)")
 }
+
+
 //: [Next](@next)
