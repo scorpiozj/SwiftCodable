@@ -3,7 +3,7 @@
 import Foundation
 
 struct Landmark: Codable {
-    var name: String
+    var name: String?
     var foundingYear: Int
     var latitude: Double
     var longitude: Double
@@ -21,7 +21,7 @@ struct Landmark: Codable {
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        name = try values.decode(String.self, forKey: .name)
+        name = try? values.decode(String.self, forKey: .name)
         let detailInfo = try values.nestedContainer(keyedBy: DetailKeys.self, forKey: .detail)
         foundingYear = try detailInfo.decode(Int.self, forKey: .foundingYear)
         latitude = try detailInfo.decode(Double.self, forKey: .latitude)
@@ -41,7 +41,7 @@ struct Landmark: Codable {
 let json = """
 [
     {
-        "name":"Suny Island",
+        "name":null,
         "detail":{
             "foundingYear":1976,
             "latitude": 102.9870,
