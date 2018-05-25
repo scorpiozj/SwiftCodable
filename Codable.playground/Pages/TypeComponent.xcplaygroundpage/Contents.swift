@@ -11,9 +11,6 @@ struct Coordinate: Codable {
 struct Landmark: Codable {
     var name: String
     var founding: Int
-    
-    // Landmark now supports the Codable methods init(from:) and encode(to:),
-    // even though they aren't written as part of its declaration.
     var location: Coordinate
     
     private enum CodingKeys:String, CodingKey {
@@ -21,12 +18,6 @@ struct Landmark: Codable {
         case founding = "foundingYear"
         case latitude
         case longitude
-    }
-//    private enum AdditionalInfoKeys:String, CodingKeys {
-//        case location
-//    }
-    init?(intValue: Int) {
-        return nil
     }
     
     init(from decoder: Decoder) throws {
@@ -90,4 +81,4 @@ do {
 }
 
 
-//: [Next](@next)
+//: [Next](@TypeComponent2)
